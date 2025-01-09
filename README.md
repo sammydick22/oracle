@@ -1,6 +1,21 @@
 # GAME Python SDK Library
 The GAME Python SDK is a library that allows you interact and develop agents powered by the GAME architecture.
 
+## Installation
+```bash
+pip install game_sdk
+```
+
+To get the latest version of the SDK, clone the repository and install from source:
+```bash
+git clone https://github.com/game-by-virtuals/game-python.git
+cd game-python
+pip install -e .
+```
+
+## Usage
+Please refer to [`test_agent.py`](examples/game/test_agent.py) and [`test_worker.py`](examples/game/test_worker.py) for usage examples.
+
 ## About G.A.M.E.
 GAME is a modular agentic framework which enables an agent to plan actions and make decisions autonomously based on information provided to it.
 
@@ -43,20 +58,6 @@ Function
 > - Ability to control the low-level planner via description prompt (previously, only the high-level planner and functions could be controlled via description prompts)
 > - The description defined in the agent is equivalent to what was previously known as world information and agent description
 
-## Installation
-```bash
-pip install game_sdk
-```
-
-To get the latest version of the SDK, clone the repository and install from source:
-```bash
-git clone https://github.com/game-by-virtuals/game-python.git
-cd game-python
-pip install -e .
-```
-
-## Usage
-Please refer to [`test_agent.py`](examples/game/test_agent.py) and [`test_worker.py`](examples/game/test_worker.py) for usage examples.
 
 ## How to Contribute
 Contributions are welcome, especially in the form of new plugins! We are working on creating a plugins repo, but in meantime - please contact us via [Twitter](https://x.com/GAME_Virtuals) or [Telegram](https://t.me/virtuaIs_io).
@@ -65,5 +66,5 @@ Contributions are welcome, especially in the form of new plugins! We are working
 Detailed documentation to better understand the configurable components and the GAME architecture can be found on [here](https://whitepaper.virtuals.io/developer-documents/game-framework).
 
 ## Useful Resources
-- [TypeScript SDK](https://www.npmjs.com/package/@virtuals-protocol/game): The core logic of this SDK mirrors the logic of this python SDK if you prefer to develop your agents in TypeScript.
-- [Twitter Agent](./src/game_sdk/hosted_game/README.md): The Virtuals Platform offers a out-of-the-box hosted agent that can be used to interact with the Twitter/X platform, powered by GAME. This agent comes with existing functions/actions that can be used to interact with the Twitter/X platform and can be immediately hosted/deployed as you configure it. This is similar to configuring your agent in the [Agent Sandbox](https://game-lite.virtuals.io/) on the [Virtuals Platform](https://app.virtuals.io/) but through a developer-friendly SDK interface.
+- [GAME TypeScript SDK](https://www.npmjs.com/package/@virtuals-protocol/game): The core logic of this SDK mirrors the logic of this python SDK if you prefer to develop your agents in TypeScript. Tyepscript SDK repository and contributed typescript plugins can be found [here](https://github.com/game-by-virtuals/game-node).
+- [Hosted GAME Agent](./src/game_sdk/hosted_game/README.md): This SDK also enables configuration and deployment of an out-of-the-box hosted agent that can be used to interact with the Twitter/X platform, powered by GAME. This agent comes with existing functions/actions that can be used to interact with the Twitter/X platform and can be immediately hosted/deployed as you configure it. This is similar to configuring your agent in the [Agent Sandbox](https://game-lite.virtuals.io/) on the [Virtuals Platform](https://app.virtuals.io/) but through a developer-friendly SDK interface.
