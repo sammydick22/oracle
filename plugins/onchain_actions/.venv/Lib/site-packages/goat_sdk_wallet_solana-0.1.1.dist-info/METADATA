@@ -1,0 +1,63 @@
+Metadata-Version: 2.1
+Name: goat-sdk-wallet-solana
+Version: 0.1.1
+Summary: Goat SDK Solana wallet implementation
+Home-page: https://ohmygoat.dev/
+Keywords: goat,sdk,solana,agents,ai,wallet
+Author: Andrea Villa
+Author-email: andreakarimodm@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Dist: PyNaCl (>=1.5.0,<2.0.0)
+Requires-Dist: goat-sdk (>=0.1.0,<0.2.0)
+Requires-Dist: solana (>=0.30.2,<0.31.0)
+Requires-Dist: solders (>=0.18.0,<0.19.0)
+Project-URL: Bug Tracker, https://github.com/goat-sdk/goat/issues
+Project-URL: Repository, https://github.com/goat-sdk/goat
+Description-Content-Type: text/markdown
+
+## Goat SDK Solana Wallet
+
+A Python implementation of a Solana wallet, mirroring the existing TypeScript Solana wallet.
+
+## Installation
+
+```bash
+poetry add goat-sdk-wallet-solana
+```
+
+## Usage
+
+```python
+from solana.rpc.api import Client as SolanaClient
+from solana.keypair import Keypair
+from goat_wallets.solana import solana_keypair
+
+# Initialize Solana client and keypair
+client = SolanaClient("https://api.mainnet-beta.solana.com")
+keypair = Keypair()  # Or load an existing keypair
+
+# Create wallet instance
+wallet = solana_keypair(client, keypair)
+
+# Get wallet address
+address = wallet.get_address()
+
+# Check balance
+balance = wallet.balance_of(address)
+
+# Sign message
+signature = wallet.sign_message("Hello, Solana!")
+
+# Send transaction
+transaction = {
+    "instructions": [],  # Add your transaction instructions
+    "address_lookup_table_addresses": None,  # Optional lookup tables
+    "accounts_to_sign": None,  # Optional additional signers
+}
+result = wallet.send_transaction(transaction)
+```
+

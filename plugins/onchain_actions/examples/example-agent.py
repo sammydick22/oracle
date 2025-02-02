@@ -6,13 +6,16 @@ from game_sdk.game.custom_types import FunctionResult
 from onchain_actions_game_sdk.onchain_actions import get_onchain_actions
 from goat_plugins.erc20.token import PEPE, USDC
 from goat_plugins.erc20 import ERC20PluginOptions, erc20
-
 from web3 import Web3
 from web3.middleware.signing import construct_sign_and_send_raw_middleware
 from eth_account.signers.local import LocalAccount
 from eth_account import Account
 from goat_plugins.uniswap import uniswap, UniswapPluginOptions
 from goat_wallets.web3 import Web3EVMWalletClient
+from goat_plugins.dexscreener import DexscreenerPluginOptions, dexscreener
+from goat_plugins.twitter import twitter, TwitterPluginOptions
+from goat_plugins.market_analysis import market_analysis, MarketAnalysisPluginOptions
+
 
 # Load environment variables from .env file
 env_path = Path(__file__).parent / '.env'
@@ -67,41 +70,76 @@ uniswap_base_url = os.environ.get("UNISWAP_BASE_URL", "https://trade-api.gateway
 assert uniswap_api_key is not None, "You must set UNISWAP_API_KEY environment variable"
 assert uniswap_base_url is not None, "You must set UNISWAP_BASE_URL environment variable"
 
-actions = get_onchain_actions(
-        # You can also use other wallet types, such as Solana, etc.
-        # See an example [here](https://github.com/goat-sdk/goat/blob/main/python/examples/solana/wallet/example.py)
-        wallet=Web3EVMWalletClient(w3),
-        plugins=[
-            # Add any plugin you'd want to use here. You can see a list of all available 
-            # plugins in Python [here](https://github.com/goat-sdk/goat/tree/main/python#plugins)
-            #
-            # Swap tokens with Uniswap or Jupiter, get info from CoinGecko, etc.
-            erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE])),
-            uniswap(options=UniswapPluginOptions(
-                api_key=uniswap_api_key,
-                base_url=uniswap_base_url
-            )),
-        ],
-    )
+# Initialize plugins
+twitter_plugin = twitter(options=TwitterPluginOptions(
+    credentials_path="twitter_credentials.yaml",
+    product="30day",
+    environment="dev"
+))
 
-# Create worker
+market_analysis_plugin = market_analysis(options=MarketAnalysisPluginOptions(
+    openrouter_key=os.environ.get("OPENROUTER_API_KEY")
+))
+
+# Create action spaces
+twitter_actions = get_onchain_actions(
+    wallet=Web3EVMWalletClient(w3),
+    plugins=[twitter_plugin],
+)
+
+market_analysis_actions = get_onchain_actions(
+    wallet=Web3EVMWalletClient(w3),
+    plugins=[market_analysis_plugin],
+)
+
+onchain_actions = get_onchain_actions(
+    wallet=Web3EVMWalletClient(w3),
+    plugins=[
+        erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE])),
+        dexscreener(options=DexscreenerPluginOptions()),
+        uniswap(options=UniswapPluginOptions(
+            api_key=uniswap_api_key,
+            base_url=uniswap_base_url
+        )),
+    ],
+)
+
+# Create workers
+twitter_worker = WorkerConfig(
+    id="twitter_worker",
+    worker_description="Worker that searches for trending memecoins on Twitter",
+    get_state_fn=get_worker_state,
+    action_space=twitter_actions,
+)
+
+market_analysis_worker = WorkerConfig(
+    id="market_analysis_worker",
+    worker_description="Worker that analyzes market data for memecoins",
+    get_state_fn=get_worker_state,
+    action_space=market_analysis_actions,
+)
+
 onchain_actions_worker = WorkerConfig(
     id="onchain_actions_worker",
     worker_description="Worker that executes onchain actions such as swaps, transfers, etc.",
     get_state_fn=get_worker_state,
-    action_space=actions,
+    action_space=onchain_actions,
 )
 
 # Initialize the agent
 agent = Agent(
     api_key=os.environ.get("GAME_API_KEY"),
-    name="Onchain Actions Agent",
-    agent_goal="Swap 0.01 USDC to PEPE",
+    name="Memecoin Analysis Agent",
+    agent_goal="Find trending memecoins, analyze their market potential, and trade them to make money. If you are unable to find a coin on dexscreener, just go off of the twitter sentiment",
     agent_description=(
-        "An agent that executes onchain actions"
+        "An agent that identifies trending memecoins on Twitter, analyzes their market data, "
+        "and provides insights on their potential."
+        "You are also able to directly trade these memecoins to make as much money as possible"
     ),
     get_agent_state_fn=get_agent_state_fn,
     workers=[
+        twitter_worker,
+        market_analysis_worker,
         onchain_actions_worker,
     ]
 )

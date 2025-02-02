@@ -1,0 +1,41 @@
+Metadata-Version: 2.1
+Name: goat-sdk-plugin-dexscreener
+Version: 0.1.1
+Summary: Goat plugin for Dexscreener
+Home-page: https://ohmygoat.dev/
+Keywords: goat,sdk,web3,agents,ai
+Author: Andrea Villa
+Author-email: andreakarimodm@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Dist: aiohttp (>=3.8.6,<4.0.0)
+Requires-Dist: goat-sdk (>=0.1.1,<0.2.0)
+Project-URL: Bug Tracker, https://github.com/goat-sdk/goat/issues
+Project-URL: Repository, https://github.com/goat-sdk/goat
+Description-Content-Type: text/markdown
+
+# GOAT SDK Dexscreener Plugin
+
+This plugin provides tools for interacting with the Dexscreener API, allowing you to:
+- Fetch pairs by chainId and pairId
+- Search for DEX pairs matching a query string
+- Get all DEX pairs for given token addresses
+
+## Installation
+
+```bash
+pip install goat-sdk-plugin-dexscreener
+```
+
+## Usage
+
+```python
+from goat_plugins.dexscreener import dexscreener, DexscreenerPluginOptions
+
+# Initialize the plugin
+plugin = dexscreener(DexscreenerPluginOptions())
+```
+

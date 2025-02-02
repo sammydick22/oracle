@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: goat-sdk-wallet-web3
+Version: 0.1.1
+Summary: Goat SDK Web3 wallet implementation
+Home-page: https://ohmygoat.dev/
+Keywords: goat,sdk,web3,agents,ai,evm,wallet
+Author: Andrea Villa
+Author-email: andreakarimodm@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Dist: goat-sdk (>=0.1.0,<0.2.0)
+Requires-Dist: goat-sdk-wallet-evm (>=0.1.0,<0.2.0)
+Requires-Dist: web3 (>=6.20.3,<7.0.0)
+Project-URL: Bug Tracker, https://github.com/goat-sdk/goat/issues
+Project-URL: Repository, https://github.com/goat-sdk/goat
+Description-Content-Type: text/markdown
+
+## Goat SDK Web3 Wallet
+

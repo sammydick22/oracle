@@ -13,6 +13,9 @@ from eth_account.signers.local import LocalAccount
 from eth_account import Account
 from goat_plugins.uniswap import uniswap, UniswapPluginOptions
 from goat_wallets.web3 import Web3EVMWalletClient
+from goat_plugins.dexscreener import DexscreenerPluginOptions, dexscreener
+from goat_plugins.allora import allora, AlloraPluginOptions
+from goat_plugins.exa_search import exa_search, ExaSearchPluginOptions
 
 # Load environment variables from .env file
 env_path = Path(__file__).parent / '.env'
@@ -22,6 +25,7 @@ def get_state_fn(function_result: FunctionResult, current_state: dict) -> dict:
     """
     Update state based on the function results
     """
+    
     init_state = {}
 
     if current_state is None:
@@ -61,6 +65,9 @@ actions = get_onchain_actions(
             #
             # Swap tokens with Uniswap or Jupiter, get info from CoinGecko, etc.
             erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE])),
+            dexscreener(options=DexscreenerPluginOptions()),
+            exa_search(options=ExaSearchPluginOptions(api_key="efed6cbd-15ef-4695-bdf2-7806f95ffdf9")),
+            allora(options=AlloraPluginOptions()),
             uniswap(options=UniswapPluginOptions(
                 api_key=uniswap_api_key,
                 base_url=uniswap_base_url
@@ -76,11 +83,14 @@ onchain_actions_worker = Worker(
     action_space=actions,
 )
 
-# # Run example query
+# Run example query
 queries = [
-    "Get your USDC balance in decimal units",
+    "Look up Ethereum with exa",
 ]
 for query in queries:
     print("-" * 100)
     print(f"Query: {query}")
-    onchain_actions_worker.run(query)
+    
+    # Run the query through the worker
+    result = onchain_actions_worker.run(query)
+    print(f"Worker Result: {result}")
